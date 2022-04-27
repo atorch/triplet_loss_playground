@@ -48,7 +48,7 @@ def _normalize_img(img, label):
     return (img, label)
 
 
-def main(n_epochs=30):
+def main(n_epochs=50):
 
     train_dataset, test_dataset = tfds.load(
         name="mnist", split=["train", "test"], as_supervised=True
@@ -56,7 +56,6 @@ def main(n_epochs=30):
 
     test_as_np = tfds.as_numpy(test_dataset)
     for image, label in test_as_np:
-        print(image)
         imageio.imwrite("example_mnist_digit.png", image)
         break
 
@@ -67,12 +66,12 @@ def main(n_epochs=30):
     test_dataset = test_dataset.map(_normalize_img)
     test_classes = np.concatenate([y for x, y in test_dataset], axis=0)
 
+    # TODO Try embedding_dim=64?
     model = get_model()
 
     history = model.fit(train_dataset, epochs=n_epochs,)
 
     # Maps images of digits into embedding_dim
-    # TODO Would be interesting to get a column with class labels for test dataset
     predictions_on_digits = model.predict(test_dataset)
 
     # These are Xs, i.e. they're a type of image that was never seen during training
@@ -86,14 +85,14 @@ def main(n_epochs=30):
 
     predictions_on_Xs = model.predict(_normalize_img(new_images, label=None)[0])
 
-    ## We'd like these to be nearby (small distance), are they?
+    # We'd like these to be nearby (small distance), are they?
     print("Distances between new images (images of Xs):")
     print(np.linalg.norm(predictions_on_Xs[0] - predictions_on_Xs[1]))
     print(np.linalg.norm(predictions_on_Xs[0] - predictions_on_Xs[2]))
     print(np.linalg.norm(predictions_on_Xs[1] - predictions_on_Xs[2]))
 
-    ## Expect these to be far (larger distance)
-    print("Distances between new images and digits (min, mean, max):")
+    # Expect these to be far (larger distance)
+    print("Distances between new images of Xs and digits (min, mean, max):")
     # print(np.linalg.norm(predictions_on_Xs[0] - predictions_on_digits[0]))  # Should match distances[0, 0]
     # TODO Save a histogram of these distances?
     distances = distance_matrix(predictions_on_Xs, predictions_on_digits)
@@ -111,6 +110,8 @@ def main(n_epochs=30):
     predictions_on_eights = model.predict(_normalize_img(my_eights, label=None)[0])
     distances = distance_matrix(predictions_on_eights, predictions_on_digits)
 
+    print("Min distances between mnist digits and my hand-drawn 8s:")
+    print(np.min(distances, axis=1))
     print("Classes of the mnist digits closest to my hand-drawn 8s:")
     print(test_classes[np.argmin(distances, axis=1)])
 
