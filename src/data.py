@@ -103,8 +103,9 @@ def digit_mashups(x, y, n, seed=0):
     rng = np.random.default_rng(seed)
     i = rng.integers(0, len(x), size=n)
     j = rng.integers(0, len(x), size=n)
-    keep = y[i] != y[j]
-    i, j = i[keep], j[keep]
+    # Resample partners from the same class until every pair mixes two different digits
+    while np.any(same := y[i] == y[j]):
+        j[same] = rng.integers(0, len(x), size=same.sum())
     out = x[i].copy()
     vertical = rng.random(len(i)) < 0.5
     cut = rng.integers(11, 18, size=len(i))
