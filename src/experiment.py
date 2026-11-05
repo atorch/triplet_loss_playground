@@ -255,7 +255,7 @@ def main():
     (out_dir / "metrics.json").write_text(json.dumps(metrics, indent=2))
     print(json.dumps(metrics, indent=2))
 
-    title = (f"holdout={args.holdout_digit}, augment={args.augment}, outlier_exposure={args.outlier_exposure}  |  "
+    title = (f"holdout={args.holdout_digit}, augment={args.augment}, outlier_exposure={args.outlier_exposure}\n"
              + ", ".join(f"AUROC {n}: {r['auroc']:.3f}" for n, r in ood_results.items()))
 
     marker_styles = {
