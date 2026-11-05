@@ -164,7 +164,7 @@ def main():
     parser.add_argument("--outlier-exposure", action="store_true",
                         help="add digit mashups to training, each with its own unique label (pushed away from all digits)")
     parser.add_argument("--n-outliers", type=int, default=15000)
-    parser.add_argument("--epochs", type=int, default=15)
+    parser.add_argument("--epochs", type=int, default=12)
     parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--embedding-dim", type=int, default=64)
     parser.add_argument("--margin", type=float, default=1.0)
@@ -173,9 +173,12 @@ def main():
     parser.add_argument("--out-dir", type=Path, default=None)
     args = parser.parse_args()
 
+    # Run name: the condition flags, plus every other result-affecting setting that differs from its
+    # default, so runs with different settings never overwrite each other.
     name = f"holdout{args.holdout_digit}" + ("_aug" if args.augment else "") + ("_oe" if args.outlier_exposure else "")
-    if args.seed:
-        name += f"_seed{args.seed}"
+    for key in ["n_outliers", "epochs", "batch_size", "embedding_dim", "margin", "k", "seed"]:
+        if getattr(args, key) != parser.get_default(key):
+            name += f"_{key.replace('_', '')}{getattr(args, key)}"
     out_dir = args.out_dir or data.REPO_ROOT / "results" / name
     out_dir.mkdir(parents=True, exist_ok=True)
     keras.utils.set_random_seed(args.seed)
