@@ -73,12 +73,11 @@ def main():
         for k_idx, k in enumerate(kinds):  # individual runs as dots
             vals = aurocs[cond][k]
             ax.scatter([x[k_idx]] * len(vals), vals, color="black", s=8, zorder=3)
-    ax.axhline(0.5, color="black", lw=0.8, ls=":")
     ax.set_xticks(np.arange(len(kinds)), kinds)
     ax.set_ylabel("AUROC (kNN distance score)")
-    ax.set_ylim(0.4, 1.0)
+    ax.set_ylim(0.9, 1.0)  # zoomed in: every run is far above chance (0.5)
     ax.set_title("Do OOD inputs land farther from the training digits? (bars: mean, dots: runs)", fontsize=9)
-    ax.legend(fontsize=8, loc="lower right")
+    ax.legend(fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.1), ncol=len(conditions), frameon=False)
     fig.tight_layout()
     fig.savefig(RESULTS_DIR / "auroc_summary.png", dpi=120)
     print(f"Wrote {RESULTS_DIR / 'summary.md'} and {RESULTS_DIR / 'auroc_summary.png'}")
