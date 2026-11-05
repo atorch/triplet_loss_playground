@@ -1,0 +1,75 @@
+{
+  "config": {
+    "holdout_digit": 4,
+    "augment": true,
+    "outlier_exposure": true,
+    "n_outliers": 15000,
+    "epochs": 12,
+    "batch_size": 128,
+    "embedding_dim": 64,
+    "margin": 1.0,
+    "k": 10,
+    "seed": 0,
+    "out_dir": null
+  },
+  "final_loss": 0.7360391616821289,
+  "train_seconds": 385.11530327796936,
+  "knn_accuracy_in_dist": 0.9868041694388999,
+  "in_dist_median_score": 0.19699246436357498,
+  "ood": {
+    "held-out digit 4": {
+      "auroc": 0.981558155470006,
+      "fpr_at_95_tpr": 0.07329784874695054,
+      "median_score": 0.6130415201187134,
+      "auroc_k1": 0.9788345915094454
+    },
+    "synthetic Xs": {
+      "auroc": 0.9902526058993124,
+      "fpr_at_95_tpr": 0.02905300510090929,
+      "median_score": 0.6360461115837097,
+      "auroc_k1": 0.9873355511199823
+    },
+    "Fashion-MNIST": {
+      "auroc": 0.9500041029053007,
+      "fpr_at_95_tpr": 0.16123308937680195,
+      "median_score": 0.4879375398159027,
+      "auroc_k1": 0.9553214681747616
+    }
+  },
+  "hand_drawn": {
+    "my hand-drawn Xs": {
+      "scores": [
+        0.5715512633323669,
+        0.6939300298690796,
+        0.5403072237968445
+      ],
+      "percentile_vs_mnist_test": [
+        98.69150587713462,
+        99.76713240186295,
+        98.20359281437125
+      ],
+      "nearest_training_digit": [
+        2,
+        1,
+        1
+      ]
+    },
+    "my hand-drawn 8s": {
+      "scores": [
+        0.3627087473869324,
+        0.4915674328804016,
+        0.4340299069881439
+      ],
+      "percentile_vs_mnist_test": [
+        89.66511421601243,
+        97.09469948990908,
+        94.78820137502773
+      ],
+      "nearest_training_digit": [
+        8,
+        8,
+        8
+      ]
+    }
+  }
+}
